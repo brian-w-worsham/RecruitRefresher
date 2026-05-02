@@ -1,6 +1,7 @@
 using System;
 using HarmonyLib;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
@@ -32,6 +33,17 @@ namespace RecruitRefresher
             {
                 InformationManager.DisplayMessage(
                     new InformationMessage($"Recruit Refresher load error: {ex.Message}", Colors.Red));
+            }
+        }
+
+        protected override void OnGameStart(Game game, IGameStarter gameStarterObject)
+        {
+            base.OnGameStart(game, gameStarterObject);
+
+            if (game.GameType is Campaign)
+            {
+                CampaignGameStarter campaignStarter = (CampaignGameStarter)gameStarterObject;
+                campaignStarter.AddBehavior(new RecruitRefresherBehavior());
             }
         }
 

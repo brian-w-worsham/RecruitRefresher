@@ -6,7 +6,8 @@ Never worry about recruits again! This mod ensures that towns and villages autom
 
 - **Towns and Villages Daily Refresh**: Every day, all settlements (towns and villages) will have their available recruits automatically refilled to maximum capacity.
 - **No Configuration Required**: Enable the mod and start playing. It works automatically.
-- **Full Volunteer Slots**: Notables in towns and villages are topped up so all recruit slots are available each daily refresh.
+- **Guaranteed Daily Refill**: Empty volunteer slots refill every in-game day instead of depending on the vanilla per-slot production roll.
+- **Full Player Recruit Access**: The player can recruit from all six notable volunteer slots instead of being limited by vanilla relation thresholds.
 
 ## What This Mod Does Not Change
 
@@ -18,10 +19,11 @@ Never worry about recruits again! This mod ensures that towns and villages autom
 ## Features
 
 - **Automatic Daily Refresh**: Recruits are replenished every day cycle.
-- **Vanilla-Compatible Recruit Types**: Uses Bannerlord's volunteer model for the notable's basic volunteer troop type.
+- **Vanilla-Compatible Recruit Types**: Keeps Bannerlord's normal volunteer troop generation and upgrade flow.
 - **Zero Configuration**: No settings to adjust - enable and play.
 - **Works in Campaign and Sandbox**: Compatible with all game modes.
 - **Harmony Patching**: Uses minimal, safe patches to integrate with the game.
+- **Public Event Fallback**: Also refreshes notables through Bannerlord's public daily settlement event pipeline.
 
 ## Prerequisites
 
@@ -42,18 +44,23 @@ RecruitRefresher/
 ├── src/
 │   └── RecruitRefresher/
 │       ├── RecruitRefresher.csproj
+│       ├── RecruitRefresherBehavior.cs
 │       ├── RecruitRefresherLogic.cs
 │       ├── RecruitVolunteerRuntime.cs
+│       ├── VolunteerModelRuntime.cs
 │       ├── SubModule.cs
 │       └── Patches/
+│           ├── DefaultVolunteerModelPatch.cs
 │           └── RecruitmentCampaignBehaviorPatch.cs
 └── tests/
     └── RecruitRefresher.Tests/
         ├── RecruitRefresher.Tests.csproj
+        ├── RecruitRefresherBehaviorTests.cs
         ├── RecruitRefresherLogicTests.cs
-      ├── RecruitVolunteerRuntimeTests.cs
-      ├── RecruitmentCampaignBehaviorPatchTests.cs
+        ├── RecruitVolunteerRuntimeTests.cs
+        ├── RecruitmentCampaignBehaviorPatchTests.cs
         └── SubModuleTests.cs
+        └── VolunteerModelRuntimeTests.cs
 ```
 
 ## Build
@@ -107,7 +114,7 @@ Or with a custom game path:
 5. **Return to the same settlement** and visit recruitment again.
 6. **Verify that recruits refill to full slots**: If you previously hired available troops from a notable, those empty recruit slots should be refilled after the daily tick.
 7. **Check different settlement types**:
-   - **Towns** should have notables with all recruit slots available after daily refresh.
+   - **Towns** should have notables with all six recruit slots available to the player after daily refresh.
    - **Villages** should also refill notable recruit slots daily.
 
 ### What to Look For
@@ -116,6 +123,7 @@ Or with a custom game path:
 - Recruits replenishing after 1 in-game day cycle.
 - Consistent availability across all settlements you visit.
 - If you fully recruit from a notable and wait one day, that notable has recruits again.
+- Relation with notables should no longer reduce how many recruit slots you can access as the player.
 
 ## Settings
 
@@ -124,7 +132,7 @@ This mod has **no settings file** and no in-game configuration menu. Once enable
 ## Compatibility
 
 - **Compatible with most other mods** that don't directly override settlement recruitment or daily tick behavior.
-- **May conflict with**: Other recruitment overhaul mods, settlement population mods, or mods that change daily settlement ticks.
+- **May conflict with**: Other mods that patch `DefaultVolunteerModel` or `RecruitmentCampaignBehavior`, especially recruitment overhauls.
 - **Tested with**: Base Bannerlord v1.0+
 
 ## Support

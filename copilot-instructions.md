@@ -18,8 +18,11 @@ This project is a Bannerlord singleplayer Harmony mod targeting .NET Framework 4
 
 ## Patch Safety Rules
 
+- Patch `DefaultVolunteerModel.GetDailyVolunteerProductionProbability(Hero, int, Settlement)` to guarantee daily volunteer production.
+- Patch `DefaultVolunteerModel.MaximumIndexHeroCanRecruitFromHero(Hero, Hero, int)` for player-only full recruit-slot access.
 - Patch only `RecruitmentCampaignBehavior.UpdateVolunteersOfNotablesInSettlement(Settlement)`.
 - Use a Postfix patch to top up any remaining empty volunteer slots after vanilla updates.
+- Register `RecruitRefresherBehavior` on campaign start as a public-event fallback through `DailyTickSettlementEvent`.
 - Do not modify recruitment costs, troop availability logic, or party mechanics.
 - Preserve vanilla volunteer generation and upgrade behavior.
 - Do not add save-data format changes.
@@ -30,6 +33,7 @@ This project is a Bannerlord singleplayer Harmony mod targeting .NET Framework 4
 - **Village Recruits**: Base 5 + Hearth / 100, capped at 20.
 - Ensure values are reasonable and don't unbalance game economy.
 - Volunteer slot filling happens in `RecruitVolunteerRuntime`.
+- Volunteer model overrides live in `VolunteerModelRuntime`.
 
 ## Build and Test
 
@@ -48,7 +52,9 @@ This project is a Bannerlord singleplayer Harmony mod targeting .NET Framework 4
 ## Testing Strategy
 
 - Test all core logic methods in `RecruitRefresherLogicTests.cs`.
+- Test public behavior hook behavior in `RecruitRefresherBehaviorTests.cs`.
 - Test runtime slot-fill behavior in `RecruitVolunteerRuntimeTests.cs`.
+- Test volunteer model override behavior in `VolunteerModelRuntimeTests.cs`.
 - Test patch delegate/hook behavior in `RecruitmentCampaignBehaviorPatchTests.cs`.
 - Test module initialization in `SubModuleTests.cs`.
 - Prefer pure helper and delegate-injection tests when direct game objects are difficult to construct.
